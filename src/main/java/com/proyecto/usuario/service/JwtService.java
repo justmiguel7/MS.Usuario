@@ -27,6 +27,9 @@ public class JwtService {
     }
 
     private String getToken(Map<String, Object> extraClaims, UserDetails user) {
+        // Agregamos el rol
+        extraClaims.put("rol", user.getAuthorities().iterator().next().getAuthority());
+
         return Jwts.builder()
             .setClaims(extraClaims)
             .setSubject(user.getUsername())
@@ -35,6 +38,7 @@ public class JwtService {
             .signWith(getKey(), SignatureAlgorithm.HS256)
             .compact();
     }
+
 
     private Key getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);

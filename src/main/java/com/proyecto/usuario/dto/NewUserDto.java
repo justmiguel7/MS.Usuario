@@ -9,4 +9,5 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false)
 public class NewUserDto extends UserDto {
     private RolUsuario rol;
+    private String dni;
 }

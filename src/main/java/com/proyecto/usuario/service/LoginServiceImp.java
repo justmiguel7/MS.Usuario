@@ -42,14 +42,19 @@ public class LoginServiceImp implements LoginService {
 
         return new ResponseLoginDto(token);
     }
-
+    
+    
     @Override
     public void create(NewUserDto userDto) throws Exception {
+        System.out.println("🧠 [DEBUG] JSON recibido en /auth/register => " + userDto);
+        
         Usuario usuario = new Usuario();
         usuario.setEnabled(true);
         usuario.setContrasena(passwordEncoder.encode(userDto.getPassword()));
         usuario.setCorreo(userDto.getUsername());
         usuario.setRol(userDto.getRol());
+        usuario.setDNI(userDto.getDni()); // este es el campo que debería venir
+        
         usuarioRepository.save(usuario);
     }
 }
