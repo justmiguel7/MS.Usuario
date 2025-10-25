@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.proyecto.usuario.entidades.Usuario;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -30,6 +32,10 @@ public class JwtService {
         // Agregamos el rol
         extraClaims.put("rol", user.getAuthorities().iterator().next().getAuthority());
 
+        if (user instanceof Usuario) {
+            extraClaims.put("dni", ((Usuario) user).getDNI());
+        }
+        
         return Jwts.builder()
             .setClaims(extraClaims)
             .setSubject(user.getUsername())
