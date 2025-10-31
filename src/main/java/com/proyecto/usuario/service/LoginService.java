@@ -6,5 +6,5 @@ import com.proyecto.usuario.dto.UserDto;
 
 public interface LoginService {
     ResponseLoginDto login(UserDto userDto) throws Exception;
-    void create(NewUserDto userDto) throws Exception;
+    String create(NewUserDto userDto) throws Exception; // <-- Cambiado de void a String
 }
