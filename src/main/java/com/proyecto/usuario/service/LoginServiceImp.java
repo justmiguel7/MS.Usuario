@@ -67,6 +67,7 @@ public class LoginServiceImp implements LoginService {
         usuarioRepository.save(usuario);
 
         VerificationToken token = verificationService.createVerificationToken(usuario);
+        
 
         return token.getToken();
     }

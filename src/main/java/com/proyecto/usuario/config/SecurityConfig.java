@@ -24,14 +24,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(org.springframework.security.config.annotation.web.builders.HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(t -> t
-                .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/usuario/listado").hasAnyAuthority("PACIENTE","ODONTOLOGO","ADMINISTRADOR")
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authenticationProvider(autProvider)
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/auth/**",           // 👈 todos los endpoints de autenticación públicos
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**"
+                ).permitAll()
+                .requestMatchers(HttpMethod.GET, "/usuario/listado")
+                    .hasAnyAuthority("PACIENTE", "ODONTOLOGO", "ADMINISTRADOR")
                 .anyRequest().authenticated()
             )
-            .authenticationProvider(autProvider)
-            .csrf().disable()
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(ex -> ex.authenticationEntryPoint(
                 (request, response, excep) -> {
